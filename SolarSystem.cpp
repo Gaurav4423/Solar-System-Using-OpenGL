@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<GL/glut.h>
 #include<math.h>
-static int m = 0, M = 0, v = 0, V = 0, E = 0, e = 0, r = 0, R = 0, j = 0, J = 0, s = 0, S = 0, U = 0, u = 0, n = 0, N = 0, X = 0, z = 0, B = 0, b = 0, c = 0, i = 0;  
+static int m = 0, M = 0, v = 0, V = 0, E = 0, e = 0, r = 0, R = 0, j = 0, J = 0, s = 0, S = 0, U = 0, u = 0, n = 0, N = 0, X = 0, z = 0, B = 0, b = 0, c = 0, i = 0;
 // r and R for MARS
 // X Moon
 // z Sun Rotation
@@ -31,6 +31,856 @@ void myinit(void)
 	glEnable(GL_COLOR_MATERIAL);
 }
 
+void drawSun(GLfloat position[]) {
+	glPushMatrix();
+		glRotatef((GLfloat)z, 1.0, 1.0, 1.0);
+		glLightfv(GL_LIGHT0, GL_POSITION, position);
+		glDisable(GL_LIGHTING);
+		glutSolidSphere(0.8, 40, 16);
+	glPopMatrix();
+	glPushMatrix();
+		glLightfv(GL_LIGHT0, GL_POSITION, position);
+		glDisable(GL_LIGHTING);
+		glEnable(GL_LIGHTING);
+		glColor3f(1.5, 0.5, 0.0);
+		glutSolidTorus(0.2, 0.9, 6, 20);
+	glPopMatrix();
+}
+void drawMercury() {
+	glPushMatrix();
+		glRotatef((GLfloat)M, 0.0, 1.0, 0.0);
+		glTranslatef(1.5, 0.0, 0.0);
+		glRotatef((GLfloat)m, 0.0, 1.0, 0.0);
+		glColor3f(1.0, 0.0, 0.0);
+		glutSolidSphere(0.2, 20, 8);
+	glPopMatrix();
+}
+void drawVenus() {
+	glPushMatrix();
+		glRotatef((GLfloat)V, 0.0, 1.0, 0.0);
+		glTranslatef(2.0, 0.0, 1.0);
+		glRotatef((GLfloat)v, 0.0, 1.0, 0.0);
+		glColor3f(7.5, 9.5, 1.0);
+		glutSolidSphere(0.2, 20, 8);
+	glPopMatrix();
+}
+void drawEarthAndMoon() {
+	glPushMatrix();
+		glRotatef((GLfloat)E, 0.0, 1.0, 0.0);
+		glTranslatef(3.5, 0.0, 0.0);
+		glRotatef((GLfloat)e, 0.0, 1.0, 0.0);
+		glColor3f(0.1, 6.5, 2.0);
+		glutSolidSphere(0.2, 20, 8);
+		
+		// draw moon of the Earth
+		glRotatef((GLfloat)X, 0.0, 1.0, 0.0);
+		glTranslatef(0.3, 0.2, 0.0);
+		glColor3f(4.3, 3.5, 8.0);
+		glutSolidSphere(0.1, 20, 14);
+	glPopMatrix();
+}
+
+void drawMars() {
+	glPushMatrix();
+		glRotatef((GLfloat)R, 0.0, 1.0, 0.0);
+		glTranslatef(5.0, 0.0, 3.0);
+		glRotatef((GLfloat)r, 0.0, 1.0, 0.0);
+		glColor3f(1.0, 0.2, 0.0);
+		glutSolidSphere(0.2, 20, 8);
+	glPopMatrix();
+}
+
+void drawJupiter() {
+	glPushMatrix();
+		glRotatef((GLfloat)J, 0.0, 1.0, 0.0);
+		glTranslatef(-2.5, 0.0, 1.0);
+		glRotatef((GLfloat)j, 0.0, 1.0, 0.0);
+		glColor3f(0.9, 0.7, 0.3);
+		glutSolidSphere(0.2, 20, 8);
+	glPopMatrix();
+}
+
+void drawSaturnWithRings() {
+	glPushMatrix();
+		glRotatef((GLfloat)S, 0.0, 1.0, 0.0);
+		glTranslatef(-5.0, 0.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)s, 0.0, 0.0, 5.0);
+		glColor3f(4.5, 0.5, 0.0);
+		glutSolidSphere(0.5, 20, 16);
+
+
+		int i = 0;
+		glBegin(GL_QUAD_STRIP);
+		for (i = 0; i <= 360; i++)
+		{
+			glVertex3f(sin(i * 3.1416 / 180) * 0.5, cos(i * 3.1416 / 180) * 0.5, 0);
+			glVertex3f(sin(i * 3.1416 / 180) * 0.7, cos(i * 3.1416 / 180) * 0.7, 0);
+		}
+		glEnd();
+	glPopMatrix();
+}
+
+void drawUranusWithRings() {
+	glPushMatrix();
+		glRotatef((GLfloat)U, 0.0, 1.0, 0.0);
+		glTranslatef(-6.5, 0.0, 0.0);
+		gluLookAt(10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 1.0);
+		glRotatef((GLfloat)u, 0.0, 0.0, 5.0);
+		glColor3f(1.2, 0.6, 0.2);
+		glutSolidSphere(0.5, 20, 16);
+
+
+		glBegin(GL_QUAD_STRIP);
+		for (i = 0; i <= 360; i++)
+		{
+			glVertex3f(sin(i * 3.1416 / 180) * 0.5, cos(i * 3.1416 / 180) * 0.5, 0);
+			glVertex3f(sin(i * 3.1416 / 180) * 0.7, cos(i * 3.1416 / 180) * 0.7, 0);
+		}
+		glEnd();
+	glPopMatrix();
+}
+
+void drawNeptune() {
+	glPushMatrix();
+		glRotatef((GLfloat)N, 0.0, 1.0, 0.0);
+		glTranslatef(-8.0, 0.0, 0.0);
+		glRotatef((GLfloat)n, 0.0, 1.0, 0.0);
+		glColor3f(1.0, 2.0, 0.0);
+		glutSolidSphere(0.4, 20, 8);
+	glPopMatrix();
+}
+
+void drawComets() {
+	glPushMatrix();
+		glRotatef((GLfloat)c, 6.0, -14.0, -6.0);
+		glTranslatef(5.0, 3.0, -1.0);
+		glScalef(0.60, 0.0, 2.5);
+		glColor3f(7.5, 9.5, 2.0);
+		glutSolidSphere(0.2, 12, 6);
+	glPopMatrix();
+}
+
+void drawStars() {
+	glPushMatrix();
+		glTranslatef(0.0, -2.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0.0, 2.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0.0, -4.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix(); 
+		glTranslatef(0.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0.0, -6.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0.0, 6.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0.0, -8.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0.0, 8.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(8.0, 0.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix(); 
+	
+	glPushMatrix();
+		glTranslatef(-8.0, -2.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(6.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-6.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(5.0, -4.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-7.0, 3.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-7.0, 2.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(7.0, -2.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0); 
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(7.0, -3.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-7.0, -3.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(7.0, 2.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(1.0, -7.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(2.0, -5.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(5.0, -1.0, 0.0);
+		gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.07, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-6.0, 7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.07, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-0.5, 3.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.07, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-1.5, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.07, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-9.0, 3.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.07, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(9.0, -5.9, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(6.5, 8.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(5.0, 7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-9.0, 6.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.1, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-10.5, 9.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.07, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-11.0, -7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.07, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-11.0, 5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-7.0, -5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-10.0, 3.7, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-7.0, -2.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix(); 
+	
+	glPushMatrix();
+		glTranslatef(-8.0, 5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.03, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-8.0, -5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-11.0, -4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(6.0, -5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-6.9, 7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(5.0, -4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(6.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(3.0, -4.0, 0.0); 
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(4.0, -7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-4.0, -3.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(4.0, -7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(11.0, -4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(9.0, -9.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(8.0, -4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(9.0, 5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0); glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+		glPopMatrix();
+	glPushMatrix();
+		glTranslatef(7.0, 7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.9, 7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(1.0, 6.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.8, -5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(3.0, -7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(1.0, 5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(2.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0); 
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.0, 7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(0.0, 5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-9.0, 0.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-10.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(9.0, 3.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-10.0, -6.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(10.0, 0.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-9.0, -7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-3.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-9.9, -7.5, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(1.0, 5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(3.0, 6.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-2.0, -5.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-3.0, -2.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8); 
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-4.0, -8.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(8.3, -7.1, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-10.0, 7.6, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-3.0, 7.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-1.4, 7.5, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(3.0, 6.5, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(-6.0, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix(); 
+	
+	glPushMatrix();
+		glTranslatef(-6.0, -6.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.05, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.7, 4.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(2.0, 2.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.0, -1.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.0, 1.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
+		glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(0.0, 2.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 0.0, 0.0, 0.0); glScalef(200.0, 0.0, 0.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(8.7, 9.0, 0.0);
+		gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
+		glRotatef((GLfloat)b, 1.0, 7.0, 5.0);
+		glColor3f(4.3, 3.5, 1.0);
+		glutSolidSphere(0.04, 20, 8);
+	glPopMatrix();
+}
 
 void display(void)
 {
@@ -41,135 +891,41 @@ void display(void)
 
 
 	/*draw sun*/
-	glPushMatrix();
-	glRotatef((GLfloat)z, 1.0, 1.0, 1.0);
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
-	glDisable(GL_LIGHTING);
-	glutSolidSphere(0.8, 40, 16);
-	glPopMatrix();
-	glPushMatrix();
-	glLightfv(GL_LIGHT0, GL_POSITION, position);
-	glDisable(GL_LIGHTING);
-	glEnable(GL_LIGHTING);
-	glColor3f(1.5, 0.5, 0.0);
-	glutSolidTorus(0.2, 0.9, 6, 20);
-	glPopMatrix();
+	drawSun(position);
 
 
 	/*draw smaller planet mercury*/
-	glPushMatrix();
-	glRotatef((GLfloat)M, 0.0, 1.0, 0.0);
-	glTranslatef(1.5, 0.0, 0.0);
-	glRotatef((GLfloat)m, 0.0, 1.0, 0.0);
-	glColor3f(1.0, 0.0, 0.0);	
-	glutSolidSphere(0.2, 20, 8);
-	glPopMatrix(); 
-	
+	drawMercury();
+
 	/*draw smaller plant venus*/
-	glPushMatrix();
-	glRotatef((GLfloat)V, 0.0, 1.0, 0.0);
-	glTranslatef(2.0, 0.0, 1.0);
-	glRotatef((GLfloat)v, 0.0, 1.0, 0.0);
-	glColor3f(7.5, 9.5, 1.0);
-	glutSolidSphere(0.2, 20, 8);	
-	glPopMatrix();
+	drawVenus();
 
 
 	/*draw smaller plant earth*/
-	glPushMatrix();
-	glRotatef((GLfloat)E, 0.0, 1.0, 0.0);
-	glTranslatef(3.5, 0.0, 0.0);
-	glRotatef((GLfloat)e, 0.0, 1.0, 0.0);
-	glColor3f(0.1, 6.5, 2.0);
-	glutSolidSphere(0.2, 20, 8);
-
-
-	/*draw moon of earth*/
-	glRotatef((GLfloat)X, 0.0, 1.0, 0.0);
-	glTranslatef(0.3, 0.2, 0.0);
-	glColor3f(4.3, 3.5, 8.0);
-	glutSolidSphere(0.1, 20, 14);
-	glPopMatrix();
+	drawEarthAndMoon();
 
 	/*draw smaller planet mars*/
-	glPushMatrix();
-	glRotatef((GLfloat)R, 0.0, 1.0, 0.0);
-	glTranslatef(5.0, 0.0, 3.0);
-	glRotatef((GLfloat)r, 0.0, 1.0, 0.0);
-	glColor3f(1.0, 0.2, 0.0);
-	glutSolidSphere(0.2, 20, 8);
-	glPopMatrix();
+	drawMars();
 
 
 	/*draw smaller planet Jupiter*/
-	glPushMatrix();
-	glRotatef((GLfloat)J, 0.0, 1.0, 0.0);
-	glTranslatef(-2.5, 0.0, 1.0);
-	glRotatef((GLfloat)j, 0.0, 1.0, 0.0);
-	glColor3f(0.9, 0.7, 0.3);
-	glutSolidSphere(0.2, 20, 8);	
-	glPopMatrix();
+	drawJupiter();
 
 
 	/*draw smaller plant Saturn with Rings*/
-	glPushMatrix();
-	glRotatef((GLfloat)S, 0.0, 1.0, 0.0);
-	glTranslatef(-5.0, 0.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)s, 0.0, 0.0, 5.0);
-	glColor3f(4.5, 0.5, 0.0);
-	glutSolidSphere(0.5, 20, 16);
-
-
-	int i = 0;
-	glBegin(GL_QUAD_STRIP);
-	for (i = 0; i <= 360; i++)
-	{
-		glVertex3f(sin(i * 3.1416 / 180) * 0.5, cos(i * 3.1416 / 180) * 0.5, 0);
-		glVertex3f(sin(i * 3.1416 / 180) * 0.7, cos(i * 3.1416 / 180) * 0.7, 0);
-	}
-	glEnd();
-	glPopMatrix();
+	drawSaturnWithRings();
 
 
 	/* draw smaller planet Uranus*/
-	glPushMatrix();
-	glRotatef((GLfloat)U, 0.0, 1.0, 0.0);
-	glTranslatef(-6.5, 0.0, 0.0);
-	gluLookAt(10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 10.0, 1.0);
-	glRotatef((GLfloat)u, 0.0, 0.0, 5.0);
-	glColor3f(1.2, 0.6, 0.2);
-	glutSolidSphere(0.5, 20, 16);
-
-
-	glBegin(GL_QUAD_STRIP);
-	for (i = 0; i <= 360; i++)
-	{
-		glVertex3f(sin(i * 3.1416 / 180) * 0.5, cos(i * 3.1416 / 180) * 0.5, 0);
-		glVertex3f(sin(i * 3.1416 / 180) * 0.7, cos(i * 3.1416 / 180) * 0.7, 0);
-	}
-	glEnd();
-	glPopMatrix();
+	drawUranusWithRings();
 
 
 	/* draw smaller planet Neptune */
-	glPushMatrix();
-	glRotatef((GLfloat)N, 0.0, 1.0, 0.0);
-	glTranslatef(-8.0, 0.0, 0.0);
-	glRotatef((GLfloat)n, 0.0, 1.0, 0.0);
-	glColor3f(1.0, 2.0, 0.0);
-	glutSolidSphere(0.4, 20, 8);
-	glPopMatrix();
+	drawNeptune();
 
 
 	/* draw comets */
-	glPushMatrix();
-	glRotatef((GLfloat)c, 6.0, -14.0, -6.0);
-	glTranslatef(5.0, 3.0, -1.0);
-	glScalef(0.60, 0.0, 2.5);
-	glColor3f(7.5, 9.5, 2.0);
-	glutSolidSphere(0.2, 12, 6);
-	glPopMatrix();
+	drawComets();
 
 	/*const double AST_BELT_DIST = 2.3;	// distance of closest layer of asteroid belt from sun relative to earth
 	const double AST_BELT_OFFSET = 0.05;	// offset distance for layers of asteroid belt
@@ -199,633 +955,8 @@ void display(void)
 
 
 	//to put the stars as a background
-	glPushMatrix();
-	glTranslatef(0.0, -2.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
+	drawStars();
 
-	glPushMatrix();
-	glTranslatef(0.0, 2.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.0, -4.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-
-	glPushMatrix(); glTranslatef(0.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.0, -6.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-
-	glPushMatrix();
-	glTranslatef(0.0, 6.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, -8.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, 8.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(8.0, 0.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix(); glPushMatrix();
-	glTranslatef(-8.0, -2.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(6.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-6.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(5.0, -4.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-7.0, 3.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-7.0, 2.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(7.0, -2.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0); glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(7.0, -3.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-7.0, -3.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(7.0, 2.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(1.0, -7.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(2.0, -5.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(5.0, -1.0, 0.0);
-	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.07, 20, 8); glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-6.0, 7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.07, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-0.5, 3.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.07, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-1.5, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.07, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-9.0, 3.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.07, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(9.0, -5.9, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(6.5, 8.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(5.0, 7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix(); glPushMatrix();
-	glTranslatef(-9.0, 6.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.1, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-10.5, 9.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.07, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-11.0, -7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.07, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-11.0, 5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-7.0, -5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-10.0, 3.7, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-7.0, -2.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix(); glPushMatrix();
-	glTranslatef(-8.0, 5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.03, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-8.0, -5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-11.0, -4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(6.0, -5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-6.9, 7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(5.0, -4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(6.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(3.0, -4.0, 0.0); gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(4.0, -7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-4.0, -3.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(4.0, -7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(11.0, -4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(9.0, -9.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(8.0, -4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(9.0, 5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0); glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(7.0, 7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.9, 7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(1.0, 6.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.8, -5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(3.0, -7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(1.0, 5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(2.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0); glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, 7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, 5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-9.0, 0.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-10.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(9.0, 3.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-10.0, -6.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(10.0, 0.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0); glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-9.0, -7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-3.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-9.9, -7.5, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(1.0, 5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(3.0, 6.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-2.0, -5.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-3.0, -2.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8); glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-4.0, -8.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(8.3, -7.1, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-10.0, 7.6, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-3.0, 7.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-1.4, 7.5, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(3.0, 6.5, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-6.0, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix(); glPushMatrix();
-	glTranslatef(-6.0, -6.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.05, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.7, 4.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(2.0, 2.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, 0.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, -1.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, 1.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0);
-	glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(0.0, 2.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 0.0, 0.0, 0.0); glScalef(200.0, 0.0, 0.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(8.7, 9.0, 0.0);
-	gluLookAt(0.0, 10.0, 2.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
-	glRotatef((GLfloat)b, 1.0, 7.0, 5.0);
-	glColor3f(4.3, 3.5, 1.0);
-	glutSolidSphere(0.04, 20, 8);
-	glPopMatrix();
 	glutSwapBuffers();
 }
 
@@ -909,10 +1040,10 @@ void keyboard(unsigned char key, int x, int y)
 	case 'X':X = (X + 5) % 360;
 		glutPostRedisplay();
 		break;
-	/*case 'i':i = (i + 1) % 360;
-		glutPostRedisplay();
-		break;
-		*/
+		/*case 'i':i = (i + 1) % 360;
+			glutPostRedisplay();
+			break;
+			*/
 	case 'a':z = (z + 50) % 360;
 		b = (b + 10) % 360;
 		m = (m + 3) % 360;
