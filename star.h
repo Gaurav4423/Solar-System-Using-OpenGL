@@ -11,6 +11,7 @@ void drawStars() {
 	glutSolidSphere(0.04, 20, 8);
 	glPopMatrix();
 
+
 	glPushMatrix();
 	glTranslatef(0.0, 2.0, 0.0);
 	gluLookAt(0.0, 10.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 3.0);

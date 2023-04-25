@@ -11,19 +11,19 @@ static int B = 0;
 // B all move
 // c for comets
 
-static GLint axis = 2;
-GLfloat diffuseMaterial[4] = { 0.5,0.5,0.5,1.0 };
+//static GLint axis = 2;
+GLfloat diffuseMaterial[4] = { 0.5,0.5,0.5,1.0 };//increase visibility in order
 
-/*initialize material property,light soure,lighting model,and depth buffer*/
+/* initialize material property,light source,lighting model,and depth buffer */
 
 void myinit(void)
 {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glShadeModel(GL_SMOOTH);
-	glEnable(GL_DEPTH_TEST);
-	GLfloat mat_specular[] = { 1.0,1.0,1.0,1.0 };
+	glEnable(GL_DEPTH_TEST);//to remove hidden surfaces
+	GLfloat mat_specular[] = { 1.0,1.0,1.0,1.0 };//light visibility
 	GLfloat light_position[] = { 1.0,1.0,1.0,0.0 };
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuseMaterial);//prop for lighting model
 	glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
 	glMaterialf(GL_FRONT, GL_SHININESS, 25.0);
 	glEnable(GL_LIGHTING);
@@ -115,20 +115,20 @@ void display(void)
 
 void reshape(int w, int h)
 {
-	glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+	glViewport(0, 0, (GLsizei)w, (GLsizei)h);//x(bottom left),y(top right),width,height
 	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();//identity matrix
+	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 20.0); //camera angle(,,near,far)
+	glMatrixMode(GL_MODELVIEW); ///use view
 	glLoadIdentity();
-	gluPerspective(60.0, (GLfloat)w / (GLfloat)h, 1.0, 20.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-}
+	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0); // camera to origin (eye,origin,u)
+} 
 
 
 // Keyboard Commands for movements of Planets, Sun and Comet
 void keyboard(unsigned char key, int x, int y)
-{
-	switch (key)
+{//small rotation //big revolution
+	switch (key) 
 	{
 	case 'z':z = (z + 50) % 360;
 		glutPostRedisplay();
@@ -295,13 +295,13 @@ void mouse(int btn, int state, int x, int y)
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);//double format
 	glutInitWindowSize(500, 500);
 	glutInitWindowPosition(100, 100);
 	glutCreateWindow("planets amidst stars");
 	myinit();
 	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
+	glutReshapeFunc(reshape);// perspective
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouse);
 	glEnable(GL_DEPTH_TEST);
